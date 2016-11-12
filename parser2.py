@@ -6,8 +6,12 @@ class BettingRound:
         self.actions = []
         _round_name_re = re.compile(r"^([A-Z ]+) \*\*\*.*$")
         _street_cards_re = re.compile(r".*\[(.*)\].*")
-        # hits only last [Kh] construct because 1st * is greedy.
+        # "street" hits only last [Kh] construct because 1st * is greedy.
         _hole_cards_re = re.compile(r".*Card dealt to a spot \[(.*)\]")
+        assert ('HOLE' in lines[0]
+                or 'FLOP' in lines[0]
+                or 'TURN' in lines[0]
+                or 'RIVER' in lines[0] )
         match = _round_name_re.match(lines[0])
         self.round_name = match.group(1)
         if '[' in lines[0]:
@@ -28,14 +32,15 @@ class BettingRound:
             elif ' : ' in L:
                 self.actions.append(L)
             else:
-                print('*** unhandled line:' + L)
+                print('*** unhandled line ' + self.round_name +
+                      str(lines.index(L)) + ':' + L )
     def __repr__(self):
         return str(self.__dict__)
 
 class Hand:
     def __init__(self, string):
         segments = "seats preflop flop turn river".split()
-        _hand_num_re = re.compile(r"^Ignition Hand #(\d+) .*$")
+        _hand_num_re = re.compile(r"^Hand #(\d+) .*$")
         self.seats = None
         self.preflop = None
         self.flop = None
@@ -68,7 +73,9 @@ class Hand:
 input = open('example_ignition.txt').read()
 
 ## step 1: split flat file into hands
-hands = input.split('\n\n\n')
+hands = input.split('Ignition ')
+empty = hands.pop(0) # remove 1st always empty el
+assert empty == ''
 
 for i, h in enumerate(hands):
     hands[i] = Hand(h)
