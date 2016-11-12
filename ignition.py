@@ -1,5 +1,18 @@
 import re
 
+def filename2hands(fn):
+    """Split flat file into hands. Usual step 1 of a file parsing
+    process.
+    """
+    input = open(fn).read()
+    hands_raw = input.split('Ignition ')
+    hands_parsed = []
+    empty = hands_raw.pop(0) # remove 1st always empty el
+    assert empty == ''
+    for h in hands_raw: #### left off here
+        hands_parsed.append(Hand(h))
+    return hands_parsed
+
 class BettingRound:
     def __init__(self, lines):
         self.cards = []
