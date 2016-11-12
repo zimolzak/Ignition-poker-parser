@@ -39,7 +39,6 @@ class BettingRound:
 
 class Hand:
     def __init__(self, string):
-        segments = "seats preflop flop turn river".split()
         _hand_num_re = re.compile(r"^Hand #(\d+) .*$")
         self.seats = None
         self.preflop = None
@@ -49,17 +48,25 @@ class Hand:
         self.summary = None
         ## step 2: split each hand into segments
         s = string.split('\n*** ')
-        while len(s) > 1:
-            # We don't always have flop, turn, riv, but last element is
-            # always Summary.
-            k = segments.pop(0)
+        while s:
+            # Not known whether flop, turn, riv, or summary is in
+            # there.
             ## step 3: split each segment into lines
             v = s.pop(0).splitlines()
-            if k in "preflop flop turn river".split():
-                self.__dict__[k] = BettingRound(v)
+            if 'Hand #' in v[0]:
+                self.seats = v
+            elif 'HOLE' in v[0]:
+                self.preflop = BettingRound(v)
+            elif 'FLOP' in v[0]:
+                self.flop = BettingRound(v)
+            elif 'TURN' in v[0]:
+                self.turn = BettingRound(v)
+            elif 'RIVER' in v[0]:
+                self.river = BettingRound(v)
+            elif 'SUMMARY' in v[0]:
+                self.summary = v
             else:
-                self.__dict__[k] = v
-        self.summary = s.pop(0).splitlines()
+                assert False
         assert len(s) == 0
         ## step 4: parse various elements at sub-line level
         match = _hand_num_re.match(self.seats[0])
