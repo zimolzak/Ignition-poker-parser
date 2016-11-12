@@ -87,6 +87,10 @@ assert empty == ''
 for i, h in enumerate(hands):
     hands[i] = Hand(h)
 
-## [ { s:[] p:[] f:[] s:[] }  { s:[] p:[] f:[] t:[] r:[] s:[] }  {}  {} ]
-
-print(hands[0])
+for x in hands:
+    print(x.hand_number)
+    print('----')
+    for a in x.preflop.actions:
+        if '[ME]' in a:
+            print(a)
+    print()
