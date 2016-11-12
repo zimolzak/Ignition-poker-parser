@@ -5,11 +5,13 @@ class BettingRound:
         self.cards = []
         self.actions = []
         _round_name_re = re.compile(r"^([A-Z ]+) \*\*\*.*$")
-        _street_cards_re = re.compile(r"\*\*\*.*\[(.+)\]")
+        _street_cards_re = re.compile(r".*\[(.*)\].*")
+        # hits only last [Kh] construct because 1st * is greedy.
         _hole_cards_re = re.compile(r".*Card dealt to a spot \[(.*)\]")
         match = _round_name_re.match(lines[0])
         self.round_name = match.group(1)
         if '[' in lines[0]:
+            # only for flop/turn/riv
             match = _street_cards_re.match(lines[0])
             self.cards = match.group(1).split()
         for L in lines[1:]:
@@ -20,7 +22,8 @@ class BettingRound:
             elif ('Seat sit down' in L
                   or 'Table deposit' in L
                   or 'Seat stand' in L
-                  or 'Table enter user' in L):
+                  or 'Table enter user' in L
+                  or 'Table leave user' in L):
                 continue
             elif ' : ' in L:
                 self.actions.append(L)
@@ -47,7 +50,10 @@ class Hand:
             k = segments.pop(0)
             ## step 3: split each segment into lines
             v = s.pop(0).splitlines()
-            self.__dict__[k] = v
+            if k in "preflop flop turn river".split():
+                self.__dict__[k] = BettingRound(v)
+            else:
+                self.__dict__[k] = v
         self.summary = s.pop(0).splitlines()
         assert len(s) == 0
         ## step 4: parse various elements at sub-line level
