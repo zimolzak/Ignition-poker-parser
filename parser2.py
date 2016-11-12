@@ -1,5 +1,34 @@
 import re
 
+class BettingRound:
+    def __init__(self, lines):
+        self.cards = []
+        self.actions = []
+        _round_name_re = re.compile(r"^([A-Z ]+) \*\*\*.*$")
+        _street_cards_re = re.compile(r"\*\*\*.*\[(.+)\]")
+        _hole_cards_re = re.compile(r".*Card dealt to a spot \[(.*)\]")
+        match = _round_name_re.match(lines[0])
+        self.round_name = match.group(1)
+        if '[' in lines[0]:
+            match = _street_cards_re.match(lines[0])
+            self.cards = match.group(1).split()
+        for L in lines[1:]:
+            if 'Card dealt to a spot' in L:
+                assert not '[' in lines[0] # assert not flop/turn/riv
+                match = _hole_cards_re.match(L)
+                self.cards.append(match.group(1).split()) # list of lists
+            elif ('Seat sit down' in L
+                  or 'Table deposit' in L
+                  or 'Seat stand' in L
+                  or 'Table enter user' in L):
+                continue
+            elif ' : ' in L:
+                self.actions.append(L)
+            else:
+                print('*** unhandled line:' + L)
+    def __repr__(self):
+        return str(self.__dict__)
+
 class Hand:
     def __init__(self, string):
         segments = "seats preflop flop turn river".split()
