@@ -3,6 +3,8 @@ from __future__ import unicode_literals, absolute_import, division, print_functi
 import re
 from decimal import Decimal
 
+## based on pkr.py
+
 #    _split_re = re.compile(r"Dealing |\nDealing Cards\n|Taking |Moving |\n")
 #    _blinds_re = re.compile(r"^Blinds are now \$([\d.]*) / \$([\d.]*)$")
 #    _hero_re = re.compile(r"^\[(. .)\]\[(. .)\] to (?P<hero_name>.*)$")
@@ -35,7 +37,7 @@ def parse_players(list_of_lines):
     return players
 
 if __name__ == '__main__':
-    input = open('/Users/ajz/Desktop/example_ignition.txt').read().splitlines()
+    input = open('example_ignition.txt').read().splitlines()
     
     P = parse_players(input)
 
