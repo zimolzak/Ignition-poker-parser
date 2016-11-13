@@ -1,5 +1,30 @@
 import re
 
+class HoleCards:
+    """All the hole cards at the table, with a property to retrieve just
+    hero's cards.
+    """
+    def __init__(self, cardlist = [], heroidx = None):
+        self.cardlist = cardlist
+        self._heroidx = heroidx
+        if heroidx:
+            self.hero = cardlist[heroidx]
+        else:
+            self.hero = None
+    @property
+    def heroidx(self):
+        return self._heroidx
+    @heroidx.setter
+    def heroidx(self, i):
+        self._heroidx = i
+        self.hero = self.cardlist[i]
+    def append(self, e):
+        self.cardlist.append(e)
+    def __repr__(self):
+        return repr(self.cardlist)
+    def __getitem__(self, i):
+        return self.cardlist[i]
+
 class BettingRound:
     def __init__(self, lines):
         self.cards = []
