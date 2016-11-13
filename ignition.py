@@ -49,6 +49,18 @@ class BettingRound:
                       str(lines.index(L)) + ':' + L )
     def __repr__(self):
         return str(self.__dict__)
+    def raises_actions(self):
+        if not self.round_name == 'HOLE CARDS':
+            return None
+        else:
+            n = 0
+            r = 0
+            for a in self.actions:
+                if '[ME]' in a:
+                    n += 1
+                    if 'Raises' in a:
+                        r += 1
+        return [r, n]
 
 class Hand:
     def __init__(self, string):
@@ -86,3 +98,5 @@ class Hand:
         self.hand_number = int(match.group(1))
     def __repr__(self):
         return str(self.__dict__)
+    def pf_raises_actions(self):
+        return self.preflop.raises_actions()
