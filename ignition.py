@@ -32,7 +32,7 @@ class HoleCards:
 
 class BettingRound:
     def __init__(self, lines):
-        self.cards = []
+        self.cards = HoleCards()
         self.actions = []
         _round_name_re = re.compile(r"^([A-Z ]+) \*\*\*.*$")
         _street_cards_re = re.compile(r".*\[(.*)\].*")
@@ -47,12 +47,14 @@ class BettingRound:
         if '[' in lines[0]:
             # only for flop/turn/riv
             match = _street_cards_re.match(lines[0])
-            self.cards = match.group(1).split()
+            self.cards.cardlist = match.group(1).split()
         for L in lines[1:]:
             if 'Card dealt to a spot' in L:
                 assert not '[' in lines[0] # assert not flop/turn/riv
                 match = _hole_cards_re.match(L)
                 self.cards.append(match.group(1).split()) # list of lists
+                if '[ME]' in L:
+                    self.cards.tag_hero()
             elif ('Seat sit down' in L
                   or 'Table deposit' in L
                   or 'Seat stand' in L
