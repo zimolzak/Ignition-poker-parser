@@ -134,10 +134,16 @@ class HandList:
         input = open(filename).read()
         hands_raw = input.split('Ignition ')
         self.hand_list = []
+        self.hand_nums = []
         empty = hands_raw.pop(0) # remove 1st always empty element
         assert empty == ''
         for h in hands_raw:
-            self.hand_list.append(Hand(h))
+            candidate = Hand(h)
+            if candidate.hand_number in self.hand_nums:
+                continue
+            else:
+                self.hand_nums.append(candidate.hand_number)
+                self.hand_list.append(candidate)
         ### Compute hero's VPIP, PFR, and hands sorted by action, over
         ### all these hands.
         self.pfcr_n = 0
