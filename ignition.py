@@ -163,8 +163,7 @@ class HandList:
     def __repr__(self):
         R = ''
         for x in self.hand_list:
-            R += str(x.hand_number) + '\n----\n'
-            R += str(x.preflop.cards.hero) + '\n'
+            R += '{} (#{})\n'.format(x.preflop.cards.hero, x.hand_number)
             for a in x.preflop.actions:
                 if '[ME]' in a:
                     R += (a + '\n')
