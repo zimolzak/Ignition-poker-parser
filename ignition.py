@@ -49,7 +49,23 @@ class BettingRound:
                       str(lines.index(L)) + ':' + L )
     def __repr__(self):
         return str(self.__dict__)
-    def raises_actions(self):
+    def raisecall_actions(self):
+        if not self.round_name == 'HOLE CARDS':
+            return None
+        else:
+            n = 0
+            r = 0
+            for a in self.actions:
+                if '[ME]' in a:
+                    n += 1
+                    if 'Raises' in a or 'Calls' in a:
+                        r += 1
+        return [r, n]
+    def raise_actions(self):
+
+        ## FIXME - probably could do one func to compute, and three
+        ## properties: .raises .raisecalls .actions
+
         if not self.round_name == 'HOLE CARDS':
             return None
         else:
@@ -98,8 +114,11 @@ class Hand:
         self.hand_number = int(match.group(1))
     def __repr__(self):
         return str(self.__dict__)
-    def pf_raises_actions(self):
-        return self.preflop.raises_actions()
+    ### fixme - these next 2 methods are dumb
+    def pf_raisecall_actions(self):
+        return self.preflop.raisecall_actions()
+    def pf_raise_actions(self):
+        return self.preflop.raise_actions()
 
 class HandList:
     def __init__(self, filename):
@@ -120,11 +139,15 @@ class HandList:
             R += '\n'
         return R
     def compute_vpip(self):
-        self.pfr = 0
+        self.pfcr_n = 0
+        self.pfr_n = 0
         self.n = 0
         for x in self.hand_list:
-            [p, ac] = x.pf_raises_actions()
-            self.pfr += p
+            [cr, ac] = x.pf_raisecall_actions()
+            [r, zzz] = x.pf_raise_actions()
+            self.pfcr_n += cr
+            self.pfr_n += r
             self.n += ac
         self.n_hands = len(self.hand_list)
-        self.vpip = float(self.pfr) / self.n
+        self.vpip = float(self.pfcr_n) / self.n
+        self.pfr = float(self.pfr_n) / self.n
