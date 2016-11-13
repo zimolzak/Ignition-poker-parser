@@ -119,11 +119,12 @@ class HandList:
                     R += (a + '\n')
             R += '\n'
         return R
-    def vpip(self):
-        pfr = 0
-        n = 0
+    def compute_vpip(self):
+        self.pfr = 0
+        self.n = 0
         for x in self.hand_list:
             [p, ac] = x.pf_raises_actions()
-            pfr += p
-            n += ac
-        return float(pfr) / n
+            self.pfr += p
+            self.n += ac
+        self.n_hands = len(self.hand_list)
+        self.vpip = float(self.pfr) / self.n
