@@ -138,24 +138,19 @@ class HandList:
         assert empty == ''
         for h in hands_raw:
             self.hand_list.append(Hand(h))
-        ### Compute hero's VPIP and PFR over all these hands.
+        ### Compute hero's VPIP, PFR, and hands sorted by action, over
+        ### all these hands.
         self.pfcr_n = 0
         self.pfr_n = 0
         self.n = 0
-        ## fixme - something like self.hero_range = {'r':[] 'c':[] 'f':[]}
-        self.call_cards = []
-        self.raise_cards = []
-        self.fold_cards = []
+        self.hero_range = {'Raise':[], 'Call':[], 'Fold':[]}
         for x in self.hand_list:
             self.pfcr_n += (x.preflop.call_n + x.preflop.raise_n)
             self.pfr_n += x.preflop.raise_n
             self.n += x.preflop.action_n
-            if x.preflop.hero_first == 'Raise':
-                self.raise_cards.append(x.preflop.cards.hero)
-            elif x.preflop.hero_first == 'Call':
-                self.call_cards.append(x.preflop.cards.hero)
-            elif x.preflop.hero_first == 'Fold':
-                self.fold_cards.append(x.preflop.cards.hero)
+            for k in self.hero_range.keys():
+                if x.preflop.hero_first == k:
+                    self.hero_range[k].append(x.preflop.cards.hero)
         self.n_hands = len(self.hand_list)
         self.vpip = float(self.pfcr_n) / self.n
         self.pfr = float(self.pfr_n) / self.n
