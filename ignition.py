@@ -23,6 +23,8 @@ class HoleCards:
         self.hero = self.cardlist[i]
     def append(self, e):
         self.cardlist.append(e)
+    def tag_hero(self):
+        self.heroidx = len(self.cardlist) - 1
     def __repr__(self):
         return repr(self.cardlist)
     def __getitem__(self, i):
