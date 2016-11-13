@@ -85,6 +85,9 @@ class Hand:
         self.hand_number = int(match.group(1))
     def __repr__(self):
         return str(self.__dict__)
+    def __getitem__(self, i):
+        keys_ordered = "seats preflop flop turn river summary".split()
+        return self.__dict__[keys_ordered[i]]
 
 class HandList:
     def __init__(self, filename):
@@ -115,3 +118,5 @@ class HandList:
                     R += (a + '\n')
             R += '\n'
         return R
+    def __getitem__(self, i):
+        return self.hand_list[i]
