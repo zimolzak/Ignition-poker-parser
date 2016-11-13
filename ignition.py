@@ -4,8 +4,11 @@ class HoleCards:
     """All the hole cards at the table, with a property to retrieve just
     hero's cards.
     """
-    def __init__(self, cardlist = [], heroidx = None):
-        self.cardlist = cardlist
+    def __init__(self, cardlist = None, heroidx = None):
+        if cardlist:
+            self.cardlist = cardlist
+        else:
+            self.cardlist = []
         self._heroidx = heroidx
         if heroidx:
             self.hero = cardlist[heroidx]
