@@ -145,6 +145,7 @@ class HandList:
         R = ''
         for x in self.hand_list:
             R += str(x.hand_number) + '\n----\n'
+            R += str(x.preflop.cards.hero) + '\n'
             for a in x.preflop.actions:
                 if '[ME]' in a:
                     R += (a + '\n')
