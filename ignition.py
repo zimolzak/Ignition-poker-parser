@@ -34,36 +34,20 @@ class BettingRound:
             else:
                 print('*** unhandled line ' + self.round_name +
                       str(lines.index(L)) + ':' + L )
+        ### Tally hero's preflop raises, calls, and all actions.
+        if self.round_name == 'HOLE CARDS':
+            self.raise_n = 0
+            self.call_n = 0
+            self.action_n = 0
+            for a in self.actions:
+                if '[ME]' in a:
+                    self.action_n += 1
+                    if 'Raises' in a:
+                        self.raise_n += 1
+                    if 'Calls' in a:
+                        self.call_n += 1
     def __repr__(self):
         return str(self.__dict__)
-    def raisecall_actions(self):
-        if not self.round_name == 'HOLE CARDS':
-            return None
-        else:
-            n = 0
-            r = 0
-            for a in self.actions:
-                if '[ME]' in a:
-                    n += 1
-                    if 'Raises' in a or 'Calls' in a:
-                        r += 1
-        return [r, n]
-    def raise_actions(self):
-
-        ## FIXME - probably could do one func to compute, and three
-        ## properties: .raises .raisecalls .actions
-
-        if not self.round_name == 'HOLE CARDS':
-            return None
-        else:
-            n = 0
-            r = 0
-            for a in self.actions:
-                if '[ME]' in a:
-                    n += 1
-                    if 'Raises' in a:
-                        r += 1
-        return [r, n]
 
 class Hand:
     def __init__(self, string):
@@ -126,11 +110,9 @@ class HandList:
         self.pfr_n = 0
         self.n = 0
         for x in self.hand_list:
-            [cr, ac] = x.preflop.raisecall_actions()
-            [r, zzz] = x.preflop.raise_actions()
-            self.pfcr_n += cr
-            self.pfr_n += r
-            self.n += ac
+            self.pfcr_n += (x.preflop.call_n + x.preflop.raise_n)
+            self.pfr_n += x.preflop.raise_n
+            self.n += x.preflop.action_n
         self.n_hands = len(self.hand_list)
         self.vpip = float(self.pfcr_n) / self.n
         self.pfr = float(self.pfr_n) / self.n
