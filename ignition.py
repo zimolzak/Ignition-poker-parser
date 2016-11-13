@@ -114,11 +114,6 @@ class Hand:
         self.hand_number = int(match.group(1))
     def __repr__(self):
         return str(self.__dict__)
-    ### fixme - these next 2 methods are dumb
-    def pf_raisecall_actions(self):
-        return self.preflop.raisecall_actions()
-    def pf_raise_actions(self):
-        return self.preflop.raise_actions()
 
 class HandList:
     def __init__(self, filename):
@@ -143,8 +138,8 @@ class HandList:
         self.pfr_n = 0
         self.n = 0
         for x in self.hand_list:
-            [cr, ac] = x.pf_raisecall_actions()
-            [r, zzz] = x.pf_raise_actions()
+            [cr, ac] = x.preflop.raisecall_actions()
+            [r, zzz] = x.preflop.raise_actions()
             self.pfcr_n += cr
             self.pfr_n += r
             self.n += ac
