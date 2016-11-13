@@ -1,18 +1,5 @@
 import re
 
-def filename2hands(fn):
-    """Split flat file into hands. Usual step 1 of a file parsing
-    process.
-    """
-    input = open(fn).read()
-    hands_raw = input.split('Ignition ')
-    hands_parsed = []
-    empty = hands_raw.pop(0) # remove 1st always empty el
-    assert empty == ''
-    for h in hands_raw: #### left off here
-        hands_parsed.append(Hand(h))
-    return hands_parsed
-
 class BettingRound:
     def __init__(self, lines):
         self.cards = []
@@ -120,9 +107,9 @@ class HandList:
         input = open(filename).read()
         hands_raw = input.split('Ignition ')
         self.hand_list = []
-        empty = hands_raw.pop(0) # remove 1st always empty el
+        empty = hands_raw.pop(0) # remove 1st always empty element
         assert empty == ''
-        for h in hands_raw: #### left off here
+        for h in hands_raw:
             self.hand_list.append(Hand(h))
     def __repr__(self):
         R = ''
@@ -134,6 +121,7 @@ class HandList:
             R += '\n'
         return R
     def compute_vpip(self):
+        ### fixme - could legitimately become part of __init__
         self.pfcr_n = 0
         self.pfr_n = 0
         self.n = 0
