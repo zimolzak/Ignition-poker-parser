@@ -1,13 +1,11 @@
-from ignition import Hand, filename2hands
+from ignition import HandList
 
-hands = filename2hands('example_ignition.txt')
-
-## reporting
+hands = HandList('example_ignition.txt')
 
 pfr = 0
 n = 0
 
-for x in hands:
+for x in hands.hand_list:
     print(x.hand_number)
     print('----')
     for a in x.preflop.actions:
@@ -19,4 +17,4 @@ for x in hands:
     print()
 
 print('VPIP = {}/{} = {}, over {} hands.'.format(pfr, n, float(pfr) / n,
-                                                 len(hands)))
+                                                 len(hands.hand_list)))

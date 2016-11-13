@@ -100,3 +100,20 @@ class Hand:
         return str(self.__dict__)
     def pf_raises_actions(self):
         return self.preflop.raises_actions()
+
+class HandList:
+    def __init__(self, filename):
+        input = open(filename).read()
+        hands_raw = input.split('Ignition ')
+        self.hand_list = []
+        empty = hands_raw.pop(0) # remove 1st always empty el
+        assert empty == ''
+        for h in hands_raw: #### left off here
+            self.hand_list.append(Hand(h))
+    def __repr__(self):
+        H = str(x.hand_number) + '\n----\n'
+        A = ""
+        for a in x.preflop.actions:
+            if '[ME]' in a:
+                A += (a + '\n')
+        return H + A
