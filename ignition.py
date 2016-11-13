@@ -111,9 +111,19 @@ class HandList:
         for h in hands_raw: #### left off here
             self.hand_list.append(Hand(h))
     def __repr__(self):
-        H = str(x.hand_number) + '\n----\n'
-        A = ""
-        for a in x.preflop.actions:
-            if '[ME]' in a:
-                A += (a + '\n')
-        return H + A
+        R = ''
+        for x in self.hand_list:
+            R += str(x.hand_number) + '\n----\n'
+            for a in x.preflop.actions:
+                if '[ME]' in a:
+                    R += (a + '\n')
+            R += '\n'
+        return R
+    def vpip(self):
+        pfr = 0
+        n = 0
+        for x in self.hand_list:
+            [p, ac] = x.pf_raises_actions()
+            pfr += p
+            n += ac
+        return float(pfr) / n
