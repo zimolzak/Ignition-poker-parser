@@ -9,6 +9,36 @@ without many external modules.
 Ignition has anonymous players, so my main focus is on tracking stats,
 patterns, ranges, areas for improvement on *myself*.
 
+Usage: `python main.py hand_history_file.txt`
+
+Hand history files tend to be located/named like
+
+    /Applications/IgnitionCasino.app/Contents/MacOS/Hand\ History/12345678/
+    HH20161106-170102\ -\ 1234567\ -\ RING\ -\ \$0.02-\$0.05\ -\ HOLDEM\ -\ NL\ -\ TBL\ No.12345678.txt
+
+And have contents like
+
+    Ignition Hand #1234567890 TBL#12345678 HOLDEM No Limit - 2016-11-06 17:01:02
+    Seat 1: Big Blind [ME] ($4.98 in chips)
+    Seat 4: Dealer ($5.02 in chips)
+    Dealer : Set dealer [4]
+    Dealer : Small Blind $0.02
+    Table deposit $1.50
+    Table enter user
+    Big Blind  [ME] : Big blind $0.05
+    *** HOLE CARDS ***
+    Big Blind  [ME] : Card dealt to a spot [7s Jd]
+    Dealer : Card dealt to a spot [9d Kd]
+    Dealer : Calls $0.03
+    Seat sit down
+    Big Blind  [ME] : Raises $0.05 to $0.10
+    Table deposit $1.50
+    Dealer : Calls $0.05
+    *** FLOP *** [8h 7h 7d]
+    Big Blind  [ME] : Checks
+
+...*et cetera.*
+
 Example output
 --------
 
