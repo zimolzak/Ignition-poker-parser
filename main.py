@@ -1,7 +1,10 @@
 from ignition import HandList
 from pprint import pprint
+from sys import argv
 
-h = HandList('example_ignition.txt')
+## usage: python main.py example_ignition.txt
+
+h = HandList(argv[1])
 print(h)
 print('VPIP = {}/{} = {}, over {} hands.'.format(h.pfcr_n, h.n,
                                                  h.vpip, h.n_hands))
