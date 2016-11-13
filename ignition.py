@@ -71,13 +71,21 @@ class BettingRound:
             self.raise_n = 0
             self.call_n = 0
             self.action_n = 0
+            self.hero_first = ''
             for a in self.actions:
                 if '[ME]' in a:
                     self.action_n += 1
                     if 'Raises' in a:
                         self.raise_n += 1
-                    if 'Calls' in a:
+                        if self.action_n == 1:
+                            self.hero_first = 'Raise'
+                    elif 'Calls' in a:
                         self.call_n += 1
+                        if self.action_n == 1:
+                            self.hero_first = 'Call'
+                    elif 'Folds' in a:
+                        if self.action_n == 1:
+                            self.hero_first = 'Fold'
     def __repr__(self):
         return str(self.__dict__)
 
@@ -134,10 +142,20 @@ class HandList:
         self.pfcr_n = 0
         self.pfr_n = 0
         self.n = 0
+        ## fixme - something like self.hero_range = {'r':[] 'c':[] 'f':[]}
+        self.call_cards = []
+        self.raise_cards = []
+        self.fold_cards = []
         for x in self.hand_list:
             self.pfcr_n += (x.preflop.call_n + x.preflop.raise_n)
             self.pfr_n += x.preflop.raise_n
             self.n += x.preflop.action_n
+            if x.preflop.hero_first == 'Raise':
+                self.raise_cards.append(x.preflop.cards.hero)
+            elif x.preflop.hero_first == 'Call':
+                self.call_cards.append(x.preflop.cards.hero)
+            elif x.preflop.hero_first == 'Fold':
+                self.fold_cards.append(x.preflop.cards.hero)
         self.n_hands = len(self.hand_list)
         self.vpip = float(self.pfcr_n) / self.n
         self.pfr = float(self.pfr_n) / self.n
