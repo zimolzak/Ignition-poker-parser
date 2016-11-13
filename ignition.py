@@ -95,17 +95,7 @@ class HandList:
         assert empty == ''
         for h in hands_raw:
             self.hand_list.append(Hand(h))
-    def __repr__(self):
-        R = ''
-        for x in self.hand_list:
-            R += str(x.hand_number) + '\n----\n'
-            for a in x.preflop.actions:
-                if '[ME]' in a:
-                    R += (a + '\n')
-            R += '\n'
-        return R
-    def compute_vpip(self):
-        ### fixme - could legitimately become part of __init__
+        ### Compute hero's VPIP and PFR over all these hands.
         self.pfcr_n = 0
         self.pfr_n = 0
         self.n = 0
@@ -116,3 +106,12 @@ class HandList:
         self.n_hands = len(self.hand_list)
         self.vpip = float(self.pfcr_n) / self.n
         self.pfr = float(self.pfr_n) / self.n
+    def __repr__(self):
+        R = ''
+        for x in self.hand_list:
+            R += str(x.hand_number) + '\n----\n'
+            for a in x.preflop.actions:
+                if '[ME]' in a:
+                    R += (a + '\n')
+            R += '\n'
+        return R
