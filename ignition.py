@@ -129,7 +129,7 @@ class Hand:
         keys_ordered = "seats preflop flop turn river summary".split()
         return self.__dict__[keys_ordered[i]]
 
-class HandList:
+class ParsedHandList:
     def __init__(self, filename):
         input = open(filename).read()
         hands_raw = input.split('Ignition ')
@@ -146,20 +146,20 @@ class HandList:
                 self.hand_list.append(candidate)
         ### Compute hero's VPIP, PFR, and hands sorted by action, over
         ### all these hands.
-        self.pfcr_n = 0
-        self.pfr_n = 0
+        self.calls_raises = 0
+        self.raises = 0
         self.n = 0
         self.hero_range = {'Raise':[], 'Call':[], 'Fold':[]}
         for x in self.hand_list:
-            self.pfcr_n += (x.preflop.call_n + x.preflop.raise_n)
-            self.pfr_n += x.preflop.raise_n
+            self.calls_raises += (x.preflop.call_n + x.preflop.raise_n)
+            self.raises += x.preflop.raise_n
             self.n += x.preflop.action_n
             for k in self.hero_range.keys():
                 if x.preflop.hero_first == k:
                     self.hero_range[k].append(x.preflop.cards.hero)
         self.n_hands = len(self.hand_list)
-        self.vpip = float(self.pfcr_n) / self.n
-        self.pfr = float(self.pfr_n) / self.n
+        self.vpip = float(self.calls_raises) / self.n
+        self.pfr = float(self.raises) / self.n
     def __repr__(self):
         R = ''
         for x in self.hand_list:

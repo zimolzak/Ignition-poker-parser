@@ -1,15 +1,21 @@
-from ignition import HandList
+from ignition import ParsedHandList
 from pprint import pprint
 from sys import argv
 
 ## usage: python main.py example_ignition.txt
 
-h = HandList(argv[1])
+h = ParsedHandList(argv[1])
 print(h)
-print('VPIP = {}/{} = {}, over {} hands.'.format(h.pfcr_n, h.n,
-                                                 h.vpip, h.n_hands))
-print('PFR = {}/{} = {}, over {} hands.'.format(h.pfr_n, h.n,
-                                                 h.pfr, h.n_hands))
-for key, handlist in h.hero_range.items():
-    print(key + ':')
-    pprint(handlist)
+print('SUMMARY\n========')
+for action_type, hands_for_action in h.hero_range.items():
+    print(action_type + ':')
+    pprint(hands_for_action)
+print()
+print('VPIP = {}  ({}/{} over {} hands)'.format(round(h.vpip, 4),
+                                                h.calls_raises,
+                                                h.n,
+                                                h.n_hands))
+print('PFR  = {}  ({}/{} over {} hands)'.format(round(h.pfr, 4),
+                                                h.raises,
+                                                h.n,
+                                                h.n_hands))
